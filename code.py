@@ -1,10 +1,4 @@
 # app.py
-# Streamlit dashboard for browsing local photos
-# - Lists villages (folders in D:\patila\Photos)
-# - Search for village
-# - Show gallery per village
-# - No upload functionality
-
 import streamlit as st
 from pathlib import Path
 
@@ -47,7 +41,7 @@ if search:
 if not all_villages:
     st.warning("No villages found.")
 else:
-    # Sidebar village selector with photo counts
+    # Sidebar with village name + photo count
     village_counts = {v.name: len(list_images(v)) for v in all_villages}
     vnames = [f"{v} ({village_counts[v]})" for v in village_counts]
 
@@ -57,8 +51,10 @@ else:
     # --- Gallery view ---
     vdir = PHOTOS_ROOT / selected
     imgs = list_images(vdir)
+    photo_count = len(imgs)
 
-    st.header(f"Village: {selected} — {len(imgs)} photos")
+    # Header with both name + count
+    st.header(f"Village: {selected} — {photo_count} photos")
 
     if not imgs:
         st.info("No images in this village yet.")
