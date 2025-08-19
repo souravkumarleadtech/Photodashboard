@@ -2,6 +2,7 @@
 import streamlit as st
 from pathlib import Path
 
+
 # ====== CONFIG ======
 PHOTOS_ROOT = Path(r"D:\patila\Photos")  # <-- change if needed
 ALLOWED_EXTS = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tif", ".tiff"}
