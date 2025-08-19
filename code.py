@@ -19,8 +19,10 @@ def is_allowed(filename: str) -> bool:
 
 def villages():
     PHOTOS_ROOT.mkdir(parents=True, exist_ok=True)
-    return sorted([p for p in PHOTOS_ROOT.iterdir() if p.is_dir() and not p.name.startswith(".")],
-                  key=lambda p: p.name.lower())
+    return sorted(
+        [p for p in PHOTOS_ROOT.iterdir() if p.is_dir() and not p.name.startswith(".")],
+        key=lambda p: p.name.lower()
+    )
 
 def list_images(folder: Path):
     if not folder.exists():
@@ -45,14 +47,18 @@ if search:
 if not all_villages:
     st.warning("No villages found.")
 else:
-    # Sidebar village selector
-    vnames = [v.name for v in all_villages]
-    selected = st.sidebar.selectbox("Choose a village", vnames)
+    # Sidebar village selector with photo counts
+    village_counts = {v.name: len(list_images(v)) for v in all_villages}
+    vnames = [f"{v} ({village_counts[v]})" for v in village_counts]
+
+    selected_display = st.sidebar.selectbox("Choose a village", vnames)
+    selected = selected_display.split(" (")[0]  # pure village name
 
     # --- Gallery view ---
-    st.header(f"Village: {selected}")
     vdir = PHOTOS_ROOT / selected
     imgs = list_images(vdir)
+
+    st.header(f"Village: {selected} — {len(imgs)} photos")
 
     if not imgs:
         st.info("No images in this village yet.")
